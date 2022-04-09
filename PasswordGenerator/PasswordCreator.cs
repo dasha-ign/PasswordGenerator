@@ -11,7 +11,7 @@ namespace PasswordGenerator
     {
         const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         const string digits = "0123456789";
-        public const string symbols = "!@#$%^&*()-_=+<,>.";
+        public const string symbols = "!@#()_+-="; // "!@#$%^&*()-_=+<,>.";
     //    string allSymbols = chars + chars.ToLower() + digits + symbols;
 
         public static List<string> PasswordList(int count, int passwordLength)
@@ -35,7 +35,7 @@ namespace PasswordGenerator
             var random = new Random();
             var randomNumbers = Enumerable.Range(0, length).OrderBy(x => random.Next()).Take(length).ToList();
             // we need to ensure first password symbol is going to be character
-            if (randomNumbers.ToArray()[0] == 12) 
+            if (randomNumbers.ToArray()[0] == length-1) 
                 randomNumbers = randomNumbers.ToArray().Reverse().ToList();
             int specSymbolPosition = random.Next(1, length - 1);
             foreach (var number in randomNumbers)
@@ -46,9 +46,9 @@ namespace PasswordGenerator
                         password[number] = randomNumbers.IndexOf(number) % 2 == 0 ?
                                             chars[random.Next(0, 25)] :
                                             chars.ToLower()[random.Next(0, chars.Length)],
-                    int i when i > 7 && i < 12 =>
+                    int i when i > 7 && i < 11 =>
                         password[number] = digits[random.Next(0, digits.Length)],
-                    int i when i == 12 =>
+                    int i when i == 11 =>
                     password[number] = symbols[random.Next(0, symbols.Length)],
                     _ => password[number] =  allSymbols[random.Next(0, allSymbols.Length)]
                 };
